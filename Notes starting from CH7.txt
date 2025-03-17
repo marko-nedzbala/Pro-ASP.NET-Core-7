@@ -1,0 +1,228 @@
+
+Work PC SDK is 9.0.100
+
+Chapter07
+SportsStore: A real application
+
+Steps:
+1.) Install Entity Framework Core EF-Core
+2.) Create the connection string
+3.) Create the database context class
+4.) Create repositoy interface and implementation class
+
+builder.Services property is used to setup objects, services, that can be used through-out the application and are accessed via dependency injection
+
+annotating a type
+[Column(TypeName = "decimal(8, 2")]
+public decimal Price { get; set; }
+
+Step 1.) Install Entity Framework Core EF-Core
+Install Entity Framework Core
+$ dotnet add package Microsoft.EntityFrameworkCore.Design --version 7.0.0
+$ dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 7.0.0
+
+Also need a tools package, includes command-line tools required to prepare and create databases ASP.NET Core Applications
+$ dotnet tool uninstall --global dotnet-ef
+$ dotnet tool install --global dotnet-ef --version 7.0.0
+
+Step 2.) Create the connection string
+Connection Strings
+appsettings.json
+
+"AllowedHosts": "*",
+"ConnectionStrings": {
+  "SportsStoreConnection": "Server=(localdb)\\MSSQLLocalDB;Database=SportsStore;MultipleActiveResultSets=true"
+}
+
+Enables the MultipleActiveResultSets(MARS) feature, required by some database queries
+https://www.connectionstrings.com/
+
+Step 3.) Create the database context class
+Create the database context class
+EF-Core provides access to the database through a context class
+./Models/MyDbContext.cs
+
+using Microsoft.EntityFrameworkCore;
+
+namespace SportsStore.Models
+{
+    public class StoreDbContext : DbContext //DbContext provides access to EF-Core functionality
+    {
+		// adds the properties that will be used to read/write the application's data
+        public StoreDbContext(DbContextOptions<StoreDbContext> options) : base(options) { }
+		
+		// provides access to the Product objects in the database
+        public DbSet<Product> Products => Set<Product>();
+    }
+}
+
+We add the IConfiguration to access the ASP.NET Core configuration system, appsettings.json, via builder.Configuration
+AddDbContext() registers the database context class and configures the relationship with the database
+
+builder.Services.AddDbContext<StoreDbContext>(opts =>
+{
+    opts.UseSqlServer(builder.Configuration["ConnectionStrings:SportsStoreConnection"]);
+});
+
+Step 4.) Create repositoy interface and implementation class
+IStoreRepository.cs
+
+IQueryable<T> allows us to use LINQ to query the database
+
+Services allow classes to use interfaces without needing to know which implementation class is being used
+
+Creating databas migration
+$ dotnet ef migrations add Initial
+
+Creating seed data
+create a file with the fake data
+
+$ dotnet ef database drop --force --context StoreDbContext
+
+
+Displaying a list of products
+
+
+
+
+
+
+
+
+
+
+
+
+Might need to copy this:
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:5000",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "SportsStore": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
