@@ -77,12 +77,18 @@ $ dotnet ef migrations add Initial
 Creating seed data
 create a file with the fake data
 
+$ dotnet ef database update
+
+Reset the database
 $ dotnet ef database drop --force --context StoreDbContext
 
 
 Displaying a list of products
 
+1.) Prepare the controller
+2.) Updating the view
 
+Adding Pagination
 
 
 

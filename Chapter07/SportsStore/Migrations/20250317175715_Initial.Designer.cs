@@ -11,7 +11,7 @@ using SportsStore.Models;
 namespace SportsStore.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20250317165147_Initial")]
+    [Migration("20250317175715_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -49,7 +49,7 @@ namespace SportsStore.Migrations
 
                     b.HasKey("ProductID");
 
-                    b.ToTable("Products");
+                    b.ToTable("Product");
                 });
 #pragma warning restore 612, 618
         }

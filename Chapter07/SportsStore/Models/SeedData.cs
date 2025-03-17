@@ -2,8 +2,10 @@
 
 namespace SportsStore.Models
 {
-    public class SeedData
+
+    public static class SeedData
     {
+
         public static void EnsurePopulated(IApplicationBuilder app)
         {
             StoreDbContext context = app.ApplicationServices
@@ -85,7 +87,6 @@ namespace SportsStore.Models
                         Price = 1200
                     }
                 );
-
                 context.SaveChanges();
             }
         }
