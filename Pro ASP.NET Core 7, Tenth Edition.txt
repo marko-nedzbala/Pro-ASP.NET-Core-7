@@ -1,0 +1,463 @@
+
+Work PC SDK is 9.0.100
+
+https://github.com/manningbooks/pro-asp.net-core-7
+
+
+Chapter01
+Putting ASP.NET Core in context
+
+ASP.NET Core Identity: Microsoft's authentication and authorization framework, used to validate user credentials in ASP.NET Core applications restrict access to application features
+
+
+
+
+
+PART I
+
+Chapter02
+Getting Started
+
+uses SQL Server Express LocalDB
+
+Need to install the .NET SDK
+$ dotnet --list-sdks
+
+$ dotnet new globaljson --sdk-version 7.0.100 --output FirstProject
+$ dotnet new mvc --no-https --output FirstProject --framework net7.0
+$ dotnet new sln -o FirstProject
+$ dotnet sln FirstProject add FirstProject
+
+Starting your application
+$ dotnet run
+
+he changed the lanuchSettings.json to use port 5000
+htpp://localhost:5000
+
+Endpoints
+incoming requests are handled by endpoints
+action: a method written in C#, defined in a controller
+controller: C# class derived from Microsoft.AspNetCore.Mvc.Controller
+
+Route: a rule that is used to decide how a request is handled
+
+View: renders the HTML
+telling ASP.NET to render a view
+public class HomeController : Controller
+{
+    public ViewResult Index()
+    {
+        // MyView is the name of your view in the Views folder
+        return View("MyView");
+    }
+}
+
+Razor: is a view engine
+Razor expressions: the expressions in views
+
+Action method: main job is to construct data and pass it to the view so it can be used to create HTML content based on the data values, provide data to views by passing arguments to the iew method
+
+View model: the data provided to the view
+the type of view model:                         @model
+view model value included in the HTML output:   @Model
+
+Putting the pieces together
+It is a simple result, but this example reveals all the building blocks you need to create a simple ASP.NET Core web application and to generate a dynamic response. The ASP.NET Core platform receives an HTTP request and uses the routing system to match the request URL to an endpoint. The endpoint, in this case, is the Index action method defined by the Home controller. The method is invoked and produces a ViewResult object that contains the name of a view and a view model object. The Razor view engine locates and processes the view, evaluating the @Model expression to insert the data provided by the action method into the response, which is returned to the browser and displayed to the user. There are, of course, many other features available, but this is the essence of ASP.NET Core, and it is worth bearing this simple sequence in mind as you read the rest of the book.
+
+
+
+Chapter03
+Your First ASP.NET Core Application
+
+to watch your project for any changes
+$ dotnet watch
+
+Adding a data model
+domain: the subject of real-world objects
+domain model: contains C# objects (known as domain objects)
+
+// Razor will look for file title MyView01.cshtml
+public ViewResult MyView01()
+{
+    return View();
+}
+
+Linking pages in Razor
+<a asp-action="MyViewname">Click Me</a>
+
+asp-action is a tag helper attribute, is an instruction for Razor that will be performed when the view is rendered
+
+Setting GET and POST
+
+[HttpGet]
+public ViewResult MyView()
+{
+    return View();
+}
+
+[HttpPost]
+public ViewResult MyView(MyModel myModelInstance)
+{
+    return View();
+}
+
+Model binding: incoming data is parsed and key-value pairs in the HTTP request are used to populate properties of domain model types, avoids having to work with HTTP requests directly and allows to work with C# objects
+
+Validation
+validation rules are defined by applying attributes to model classes
+System.ComponentModel.DataAnnotations namespace is used
+
+static content is placed in the wwwroot folder
+
+Bootstrap is installed by default with a MVC template
+
+Good Summary
++CSS and JS packages are installed into wwwroot/lib
++ASP.NET Core projects are created with the dotnet new command.
++Controllers define action methods that are used to handle HTTP requests.
++Views generate HTML content that is used to respond to HTTP requests.
++Views can contain HTML elements that are bound to data model properties.
++Model binding is the process by which request data is parsed and assigned to the properties of objects that are passed to action methods for processing.
++The data in the request can be subjected to validation and errors can be displayed to the user within the same HTML form that was used to submit the data.
+
+
+
+Chapter04
+Using the development tools
+
+Command lines
+$ dotnet new --list     creates a new project
+
+useful commands
+    web: project with minimum code required for ASP.NET Core
+    mvc: MVC project
+    webapp: configured to use Razor pages
+    blazorserver: configured for Blazor Server
+    angular: uses Angular
+    react: uses React
+    reactredux: uses React and Redux library
+
+configuration item
+    globaljson: adds a global.json file
+    sln: creates a solution file
+    gitignore: creates a .gitignore file
+
+Example of creating a project
+$ dotnet new globaljson --sdk-version 7.0.100 --output MySolution/MyProject
+$ dotnet new web --no-https --output MySolution/MyProject --framework net7.0
+$ dotnet new sln -o MySolution
+$ dotnet sln MySolution add MySolution/MyProjec
+
+$ dotnet build  //build the project
+$ dotnet run    //run the project
+$ dotnet watch  //hot reload
+
+Managing packages
+$ dotnet add package packageName    //install packages
+$ dotnet list package               //list packages
+$ dotnet remove package packageName //remove packages
+
+Client-side packages are added to ASP.NET Core using the Library manager (LibMan) tools
+
+$ dotnet tool uninstall --global Microsoft.Web.LibraryManager.Cli
+$ dotnet tool install --global Microsoft.Web.LibraryManager.Cli --version 2.1.175
+
+Initializing the example project
+$ libman init -p cdnjs
+
+Debuggers
+Visual Studio
+https://learn.microsoft.com/en-us/visualstudio/debugger/?view=vs-2022
+
+Visual Studio Code
+https://code.visualstudio.com/docs/editor/debugging
+
+
+
+Chapter05
+Essential C# Features
+
+Very good chapter on using C# features in the project
+Reread this chapter later
+
+
+
+Chapter06
+Testing ASP.NET Core Applications
+
+Very good chapter on testing
+Reread this chapter later
+
+
+
+Chapter07
+SportsStore: A Real Application
+
+@using MyApp.Models
+@using statement allows us to namespace views without needing to refer to the namespace
+
+using Razor layout
+@{
+    Layout = "myLayoutFile";
+}
+
+Steps:
+1.) Install Entity Framework Core EF-Core
+2.) Create the connection string
+3.) Create the database context class
+4.) Create repositoy interface and implementation class
+
+builder.Services property is used to setup objects, services, that can be used through-out the application and are accessed via dependency injection
+
+annotating a type
+[Column(TypeName = "decimal(8, 2")]
+public decimal Price { get; set; }
+
+Step 1.) Install Entity Framework Core EF-Core
+Install Entity Framework Core
+$ dotnet add package Microsoft.EntityFrameworkCore.Design --version 7.0.0
+$ dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 7.0.0
+
+Also need a tools package, includes command-line tools required to prepare and create databases ASP.NET Core Applications
+$ dotnet tool uninstall --global dotnet-ef
+$ dotnet tool install --global dotnet-ef --version 7.0.0
+
+Step 2.) Create the connection string
+Connection Strings
+appsettings.json
+
+"AllowedHosts": "*",
+"ConnectionStrings": {
+  "SportsStoreConnection": "Server=(localdb)\\MSSQLLocalDB;Database=SportsStore;MultipleActiveResultSets=true"
+}
+
+Enables the MultipleActiveResultSets(MARS) feature, required by some database queries
+https://www.connectionstrings.com/
+
+Step 3.) Create the database context class
+Create the database context class
+EF-Core provides access to the database through a context class
+./Models/MyDbContext.cs
+
+using Microsoft.EntityFrameworkCore;
+
+namespace SportsStore.Models
+{
+    public class StoreDbContext : DbContext //DbContext provides access to EF-Core functionality
+    {
+		// adds the properties that will be used to read/write the application's data
+        public StoreDbContext(DbContextOptions<StoreDbContext> options) : base(options) { }
+		
+		// provides access to the Product objects in the database
+        public DbSet<Product> Products => Set<Product>();
+    }
+}
+
+We add the IConfiguration to access the ASP.NET Core configuration system, appsettings.json, via builder.Configuration
+AddDbContext() registers the database context class and configures the relationship with the database
+
+builder.Services.AddDbContext<StoreDbContext>(opts =>
+{
+    opts.UseSqlServer(builder.Configuration["ConnectionStrings:SportsStoreConnection"]);
+});
+
+Step 4.) Create repositoy interface and implementation class
+IStoreRepository.cs
+
+IQueryable<T> allows us to use LINQ to query the database
+
+Services allow classes to use interfaces without needing to know which implementation class is being used
+
+Creating databas migration
+$ dotnet ef migrations add Initial
+
+Creating seed data
+create a file with the fake data
+
+$ dotnet ef database update
+
+Reset the database
+$ dotnet ef database drop --force --context StoreDbContext
+
+
+Displaying a list of products
+
+1.) Prepare the controller
+2.) Updating the view
+
+Adding Pagination
+
+
+
+
+
+
+
+
+
+
+Might need to copy this:
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:5000",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "SportsStore": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Left Off Page: 57
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
