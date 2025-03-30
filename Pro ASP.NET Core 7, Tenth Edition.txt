@@ -286,8 +286,7 @@ Displaying a list of products
 2.) Updating the view
 
 Adding Pagination
-
-
+a view model class is used specifically to pass data between a controller and a view
 
 
 

@@ -2,7 +2,7 @@
 
 namespace SportsStore.Models
 {
-    [Table("Product")]
+    //[Table("Product")]
     public class Product
     {
         public long? ProductID { get; set; }

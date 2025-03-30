@@ -7,6 +7,8 @@ namespace SportsStore.Controllers
     {
         private IStoreRepository repository;
 
+        public int PageSize = 4;
+
         public HomeController(IStoreRepository repo)
         {
             repository = repo;
@@ -15,6 +17,13 @@ namespace SportsStore.Controllers
         //{
         //    return View(repository.Products);
         //}
-        public IActionResult Index() => View(repository.Products);
+
+        //public IActionResult Index(int productPage = 1)
+        //{
+        //    return View(repository.Products.OrderBy(p => p.ProductID).Skip((productPage - 1) * PageSize).Take(PageSize));
+        //}
+
+        public IActionResult Index(int productPages = 1)
+            => View(repository.Products.OrderBy(p => p.ProductID).Skip((productPages - 1) * PageSize).Take(PageSize));
     }
 }
