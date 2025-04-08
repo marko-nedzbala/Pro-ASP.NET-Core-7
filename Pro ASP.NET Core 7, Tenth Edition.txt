@@ -288,6 +288,214 @@ Displaying a list of products
 Adding Pagination
 a view model class is used specifically to pass data between a controller and a view
 
+Adding a new route in Progam.cs
+app.MapControllerRoute("pagination", "Products/Page{productPage}", new { Controller = "Home", action = "Index" });
+
+Styling
+install Bootstrap package
+
+Client Side packages are installed LibMan
+$ dotnet tool uninstall --global Microsoft.Web.LibraryManager.Cli
+$ dotnet tool install --global Microsoft.Web.LibraryManager.Cli --version 2.1.175
+
+BootStrap
+$ libman init -p cdnjs
+$ libman install bootstrap@5.2.3 -d wwwroot/lib/bootstrap
+
+
+
+Chapter 07 through Chapter
+Reread because it takes a quick tour of an ASP.NET Core Application
+
+Chapter08
+SportsStore: Navigation and Cart
+
+Chapter09
+SportsStore: Completing the cart
+
+
+
+
+
+
+
+
+
+PART 2
+Chapter12
+Understanding the ASP.NET Core Platform
+
+Key features to focus on:
+1.) Request pipeline
+2.) Middleware
+3.) Services
+
+Middleware and Request Pipeline
+purpose of ASP.NET Core platform is to receive HTTP requests -> send respones to them
+ASP delegates those to middleware components, request pipeline which are arranged in a chain
+
+Services
+are objects that provide features in a web application, any class can be used as a service
+managed by ASP and dependency injection makes it possible to access services anywhere in the application
+
+Minimum files needed for the project
+Name                                Description
+appsettings.json                    file used to configure the application
+appsettings.Development.json        file defines the configuration settings specific to development
+bin                                 folder contains the compiled application files
+global.json                         file used to select a specific version of the .NET Core SDK
+Properties/launchSettings.json      the files used to configure the application when it starts
+obj                                 folder contains the intermediate output from the compiler
+Platform.csproj                     file describes the project to the .NET Core tools
+Platform.sln                        file to organize projects
+Program.cs                          file that is the entry point for ASP
+
+Program.cs
+
+// create the builder
+// responsible for setting up the basic features of the ASP.NET Core platform, creating servies, HTTP Server (Kestrel) to accept HTTP requests
+var builder = WebApplication.CreateBuilder(args);
+
+CreateBuilder() is a WebApplicationBuilder object used to register additional services, Build() finalizes this step
+var app = builder.Build();
+
+result of Build() is WebApplication object, used to setup middleware components
+
+sets up 1 middleware component
+app.MapGet("/", () => "Hello World");
+
+MapGet() extension method for IEndpointRouteBuilder interface, implemented by WebApplication class
+
+Platfom.csproj
+the project file, contains the information that .NET Core uses to build the project and keep track of dependencies
+
+Creating custom middleware
+app.Use(...);
+registers middleware component typically expressed as a lambda (another method is used for classes)
+
+app.Use( lambda );
+app.Use( async (context, next) => { ... });
+lambda function takes:
+1.) HttpContext: describes the HTTP request and the HTTP response provides additional context
+2.) function that is invoked to tell ASP.NET Core to pass the request to the next middleware component in the pipeline
+
+ASP is responsible for processing the HTTP request and the creation of the HttpRequest object, middleware and endpoints don't have to worry about the raw request data
+Useful HttpRequest members
+
+Name            Description
+Body            This property returns a stream that can be used to read the request body.
+ContentLength   This property returns the value of the Content-Length header.
+ContentType     This property returns the value of the Content-Type header.
+Cookies         This property returns the request cookies.
+Form            This property returns a representation of the request body as a form.
+Headers         This property returns the request headers.
+IsHttps         This property returns true if the request was made using HTTPS.
+Method          This property returns the HTTP verb—also known as the HTTP method—used for the request.
+Path            This property returns the path section of the request URL.
+Query           This property returns the query string section of the request URL as key-value pairs.
+
+Useful HttpResponse members
+Name                Description
+ContentLength       This property sets the value of the Content-Length header.
+ContentType         This property sets the value of the Content-Type header.
+Cookies             This property allows cookies to be associated with the response.
+HasStarted          This property returns true if ASP.NET Core has started to send the response headers to the client, after which it is not possible to make changes to the
+                    status code or headers.
+Headers             This property allows the response headers to be set.
+StatusCode          This property sets the status code for the response.
+WriteAsync(data)    This asynchronous method writes a data string to the response body.
+Redirect(url)       This method sends a redirection response.
+
+next.Invoke() and next() are equivalent, next() is convenience
+
+Defining middleware using a class
+./Platform/Middleware.cs
+
+app.UseMiddleware<MyMiddleWareType>();
+
+A single middleware object is used to handle all requests, code in Invoke() must be thread-safe
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
