@@ -415,30 +415,70 @@ app.UseMiddleware<MyMiddleWareType>();
 
 A single middleware object is used to handle all requests, code in Invoke() must be thread-safe
 
+Several middleware components collectively contribue to the response that is produced, each providing some aspect of the response or providing some feature of data that is used in the pipeline
+
+Middleware components must not change the response status code or headers once ASP has started to send the reponse to the client, use the HasStarted property to check this
+
+components that generate complete responses can choose not to call the next() so the request isn't passed on
+short-circuit the pipeline: components that don't pass on requests
+
+Creating pipeline branches
+Map() used to create a section of pipeline that is used to process requests for specific URLs
+
+app.Map("/branch", branch => {
+	branch.UseMiddleware<>();
+});
+
+MapWhen() will match requests using a predicate, allowing requests to be selected for a pipeline branch on criteria other than just URLs
+MapWhen(context => context.Request.Query.Keys.Contains("branch"),
+	branch => {
+		// add middleware components here
+});
+
+Terminal middleware
+never forwards requests to other components and always marks the end of the request pipeline
+Run() a convenience feature for creating terminal middleware
+
+Configuring middleware
+options pattern: a common pattern for configuring middleware
+
+an example of dependency injection
+
+1.) define a class that contains the configuration options for a middleware component
+class MyClass {
+	public string City { get; set; } = "AnyTown";
+	public string Country { get; set; } = "Fake";
+}
+
+2.) Use the options pattern in Program.cs
+// must appear before the build()
+builder.Services.Configure<MyClass>(options => { options = options.City = "Fake Town"; });
+
+3.) Middleware components can access the configuration options by defining a parameter for the function that handles the request
+
+app.MapGet("/city", async (HttpContext context, IOptions<MessageOptions> msgOpts) => {
+	Platfom.MessageOptions opts = msgOpts.Value;
+	await context.Response.WriteAsync($"{opts.City}, " + opts.CountryName);
+});
+
+Options pattern with class-based middleware
 
 
 
+Chapter13
+Using URL Routing
 
+custom middleware components can be used instead of routing
 
+most components, especially terminal and short-circuiting components, are trying to match URLs
 
+routing: introduces middleware that takes care of matching request URLs so that the components, endpoints , can focus on responses
+route: the mapping between endpoints and URLs they require
+routing: the process of inspecting the set of routes, finding the endpoints to handle the request
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Adding routing middleware
+UseRouting(): 
+UseEndpoints(): 
 
 
 
